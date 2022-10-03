@@ -1,10 +1,20 @@
 package io.evilsking.XpenseApp.Services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import io.evilsking.XpenseApp.Models.UserModel;
 import io.evilsking.XpenseApp.Repositories.UserRepository;
+//import io.evilsking.XpenseApp.RepositoryImpl.UserRepositoryImpl;
 
-public class UserService {
 
-
+@Component
+public interface UserService {
+	
+	UserModel saveUser(UserModel userModel);
+	
+	UserModel getUserById(Long user_id);
+	
 }

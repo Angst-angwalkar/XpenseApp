@@ -5,7 +5,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.GenerationType;
 
 import javax.persistence.Column;
 
@@ -28,7 +28,10 @@ public class UserModel {
 //			allocationSize = 1
 //		)
 	@Id
-	@GeneratedValue(strategy = IDENTITY) // will also take generator="student_id_sequence" if using HB 4 along with above mentioned techniques
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // will also take generator="student_id_sequence" if using HB 4 along with above mentioned techniques
+	@Column(
+		name="id", nullable=false
+		)
 	private Long id;
 	@Column(
 		name="firstName", nullable=false
@@ -36,7 +39,7 @@ public class UserModel {
 	private String firstName;
 	
 	@Column(
-		name="middleName"
+		name="middleName", nullable=true
 		)
 	private String middleName;
 	
@@ -51,7 +54,7 @@ public class UserModel {
 	private String age;
 	
 	@Column(
-		name="mobileNo", nullable=false
+		name="mobileNo", nullable=false, length=25
 		)
 	private String mobileNo;
 	
@@ -77,7 +80,7 @@ public class UserModel {
 	private String address1;
 	
 	@Column(
-		name="address2", length=100
+		name="address2", nullable=true,length=100
 		)
 	private String address2;
 	
@@ -189,9 +192,8 @@ public class UserModel {
 	}
 	
 
-	public UserModel(Long id, String firstName, String middleName, String lastName, String age, String mobileNo,
+	public UserModel(String firstName, String middleName, String lastName, String age, String mobileNo,
 			String email, String panNo, String aadharNo, String address1, String address2) {
-		this.id = id;
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
