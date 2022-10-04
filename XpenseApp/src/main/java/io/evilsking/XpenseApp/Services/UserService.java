@@ -15,6 +15,8 @@ public interface UserService {
 	
 	UserModel saveUser(UserModel userModel);
 	
-	UserModel getUserById(Long user_id);
+	UserModel getUserById(Long userId);
+
+	UserModel updateUserDetails(UserModel userModel, Long userId);
 	
 }

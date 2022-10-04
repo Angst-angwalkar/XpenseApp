@@ -26,6 +26,13 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	
+	@RequestMapping(method=RequestMethod.GET, path="/user/{userId}")
+	public ResponseEntity<UserModel> getUserDetails(@PathVariable Long userId){
+		return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
+	}
+	
+	
 	@RequestMapping(method=RequestMethod.POST, path="/create-user")
 	public ResponseEntity<Object> createUser(@RequestBody UserModel userModel) {
 		UserModel savedUser = userService.saveUser(userModel);
@@ -38,9 +45,13 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, path="/user/{user_id}")
-	public ResponseEntity<UserModel> getUserDetails(@PathVariable Long user_id){
-		return new ResponseEntity<>(userService.getUserById(user_id), HttpStatus.OK);
+	
+	@RequestMapping(method=RequestMethod.PUT, path="/update-user/{userId}")
+	public ResponseEntity<Object> updateUser(@RequestBody UserModel userModel, @PathVariable Long userId){
+		UserModel updateUser = userService.updateUserDetails(userModel, userId);
+		return new ResponseEntity<>(updateUser, HttpStatus.OK);
 	}
+	
+	
 
 }
