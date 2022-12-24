@@ -1,17 +1,15 @@
 package io.evilsking.XpenseApp.ServiceImpl;
 
 import java.util.Optional;
-
-import javax.persistence.EntityManager;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
-import io.evilsking.XpenseApp.Exceptions.UserNotFoundException;
+import io.evilsking.XpenseApp.Exceptions.UserExceptions.UserValidationException;
+import io.evilsking.XpenseApp.Exceptions.UserExceptions.UserAlreadyExistsException;
+import io.evilsking.XpenseApp.Exceptions.UserExceptions.UserNotFoundException;
 import io.evilsking.XpenseApp.Models.UserModel;
 import io.evilsking.XpenseApp.Repositories.UserRepository;
 import io.evilsking.XpenseApp.Services.UserService;
+import io.evilsking.XpenseApp.Validators.UserValidators;
 
 @Repository
 public class UserServiceImpl implements UserService{
@@ -21,8 +19,45 @@ public class UserServiceImpl implements UserService{
 		this.userRepository = userRepository;
 	}
 	
+	
+	@Override
+	public UserModel getUserByUserName(String userName) {
+		UserModel userModel = userRepository.getUserByUserName(userName);
+		return userModel;
+	}
+	
 	@Override
 	public UserModel saveUser(UserModel userModel) {
+		UserModel userModel1;
+		userModel1 = userRepository.getUserByUserName(userModel.getUserName());
+		if (userModel1 != null){
+			throw new UserAlreadyExistsException("User with username " + userModel.getUserName() + " already exists. Please choose a different username.");
+		}
+		
+		userModel1 = userRepository.getUserByEmail(userModel.getEmail());
+		if (userModel1 != null){
+			throw new UserAlreadyExistsException("User with email " + userModel.getEmail() + " already exists. Please choose a different email or login to the existing account.");
+		}
+		
+		userModel1 = userRepository.getUserByMobileNo(userModel.getMobileNo());
+		if (userModel1 != null){
+			throw new UserAlreadyExistsException("User with mobile no. " + userModel.getMobileNo() + " already exists. Please choose a different mobile or login to the existing account.");
+		}
+		
+		userModel1 = userRepository.getUserByAadharNo(userModel.getAadharNo());
+		if (userModel1 != null){
+			throw new UserAlreadyExistsException("User with Aadhar No. " + userModel.getAadharNo() + " already exists.");
+		}
+		
+		userModel1 = userRepository.getUserByPanNo(userModel.getPanNo());
+		if (userModel1 != null){
+			throw new UserAlreadyExistsException("User with PAN " + userModel.getPanNo() + " already exists.");
+		}
+		
+		UserValidators validator = new UserValidators();
+		if (validator.userNameValidator(userModel) != "OK") {
+			throw new UserValidationException(validator.userNameValidator(userModel));
+		}
 		userRepository.save(userModel);
 		return userModel;
 	}
@@ -45,9 +80,45 @@ public class UserServiceImpl implements UserService{
 			throw new UserNotFoundException("Could not find user to update user details!");
 		}
 		else {
-			userModel.setId(userId);
+			userModel.setUserId(userId);
 			userRepository.save(userModel);
 			return userModel;
 		}
 	}
+	
+	@Override
+	public boolean deleteUser(Long userId) {
+		userRepository.deleteById(userId);
+		return true;
+	}
+
+
+	@Override
+	public UserModel getUserByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public UserModel getUserByMobileNo(String mobileNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public UserModel getUserByAadharNo(String aadharNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public UserModel getUserByPanNo(String panNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 }

@@ -13,6 +13,7 @@ import javax.persistence.Column;
 @Table(
 		name="User", 
 		uniqueConstraints = {
+			@UniqueConstraint(name = "username_unq", columnNames = {"userName"}),
 			@UniqueConstraint(name = "mobile_unq", columnNames = {"mobileNo"}),
 			@UniqueConstraint(name = "email_unq", columnNames = {"email"}),
 			@UniqueConstraint(name = "aadhar_unq", columnNames = {"aadharNo"}),
@@ -30,13 +31,21 @@ public class UserModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // will also take generator="student_id_sequence" if using HB 4 along with above mentioned techniques
 	@Column(
-		name="id", nullable=false
+		name="userId", nullable=false
 		)
-	private Long id;
+	private Long userId;
+	
+	
+	@Column(
+		name="userName", nullable=false, length=25
+		)
+	private String userName;
+	
 	@Column(
 		name="firstName", nullable=false
 		)
 	private String firstName;
+	
 	
 	@Column(
 		name="middleName", nullable=true
@@ -85,12 +94,20 @@ public class UserModel {
 	private String address2;
 	
 
-	public Long getId() {
-		return id;
+	public Long getUserId() {
+		return userId;
 	}
 	
-	public void setId(Long id) {
-		this.id = id;
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
+	
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 	public String getFirstName() {
@@ -177,7 +194,8 @@ public class UserModel {
 	public String toString() {
 		return "UserModel "+
 				"{"
-				+ "id=" + id + 
+				+ "user_id=" + userId + 
+				", userName=" + userName +
 				", firstName=" + firstName + 
 				", middleName=" + middleName + 
 				", lastName=" + lastName + 
@@ -192,8 +210,9 @@ public class UserModel {
 	}
 	
 
-	public UserModel(String firstName, String middleName, String lastName, String age, String mobileNo,
+	public UserModel(String userName, String firstName, String middleName, String lastName, String age, String mobileNo,
 			String email, String panNo, String aadharNo, String address1, String address2) {
+		this.userName = userName;
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;

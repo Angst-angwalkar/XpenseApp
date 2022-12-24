@@ -1,4 +1,4 @@
-package io.evilsking.XpenseApp.Exceptions;
+package io.evilsking.XpenseApp.Exceptions.UserExceptions;
 
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 

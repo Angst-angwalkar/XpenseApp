@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import io.evilsking.XpenseApp.Models.UserModel;
 import io.evilsking.XpenseApp.Repositories.UserRepository;
-//import io.evilsking.XpenseApp.RepositoryImpl.UserRepositoryImpl;
 
 
 @Component
@@ -18,5 +17,17 @@ public interface UserService {
 	UserModel getUserById(Long userId);
 
 	UserModel updateUserDetails(UserModel userModel, Long userId);
+	
+	boolean deleteUser(Long userId);
+
+	UserModel getUserByUserName(String userName);
+
+	UserModel getUserByEmail(String email);
+	
+	UserModel getUserByMobileNo(String mobileNo);
+	
+	UserModel getUserByPanNo(String panNo);
+	
+	UserModel getUserByAadharNo(String aadharNo);
 	
 }
