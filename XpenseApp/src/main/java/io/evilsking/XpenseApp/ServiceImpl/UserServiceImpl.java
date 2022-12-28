@@ -55,13 +55,38 @@ public class UserServiceImpl implements UserService{
 		}
 		
 		UserValidators validator = new UserValidators();
-		if (validator.userNameValidator(userModel) != "OK") {
-			throw new UserValidationException(validator.userNameValidator(userModel));
+		String userNameValidation = validator.userNameValidator(userModel);
+		if (userNameValidation != "OK") {
+			throw new UserValidationException(userNameValidation);
 		}
+		
+		String emailValidation = validator.emailValidator(userModel);
+		if (emailValidation != "OK") {
+			throw new UserValidationException(emailValidation);
+		}
+		
+		String panValidation = validator.panValidator(userModel);
+		if (panValidation != "OK") {
+			throw new UserValidationException(panValidation);
+		}
+		
+		String aadharValidation = validator.aadharValidator(userModel);
+		if (aadharValidation != "OK") {
+			throw new UserValidationException(aadharValidation);
+		}
+		
+		
+		String mobileValidation = validator.mobileValidator(userModel);
+		if (mobileValidation != "OK") {
+				throw new UserValidationException(mobileValidation);
+			}
+		
 		userRepository.save(userModel);
 		return userModel;
+	
 	}
-
+	
+	
 	@Override
 	public UserModel getUserById(Long userId) {
 		Optional<UserModel> userModel = userRepository.findById(userId);
