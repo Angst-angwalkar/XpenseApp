@@ -1,5 +1,6 @@
 package io.evilsking.XpenseApp.Services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,7 @@ public interface UserService {
 	UserModel getUserByPanNo(String panNo);
 	
 	UserModel getUserByAadharNo(String aadharNo);
+
+	List<UserModel> getAllUsers();
 	
 }

@@ -1,5 +1,6 @@
 package io.evilsking.XpenseApp.ServiceImpl;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
@@ -97,6 +98,15 @@ public class UserServiceImpl implements UserService{
 			return userModel.get();	
 		}
 	}
+	
+	
+	@Override
+	public List<UserModel> getAllUsers(){
+		List<UserModel> userList = userRepository.findAll();
+		return userList;
+	}
+	
+	
 	
 	@Override
 	public UserModel updateUserDetails(UserModel userModel, Long userId) {
