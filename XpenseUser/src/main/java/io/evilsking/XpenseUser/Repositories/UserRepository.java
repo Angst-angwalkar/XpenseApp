@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import io.evilsking.XpenseUser.Models.UserModel;
 
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository <UserModel, Long> {
 	
 	UserModel getUserByUserName(String userName);
@@ -15,5 +17,7 @@ public interface UserRepository extends JpaRepository <UserModel, Long> {
 	UserModel getUserByPanNo(String panNo);
 	
 	UserModel getUserByAadharNo(String aadharNo);
+
+	UserModel findByUserId(Long userId);
 	
 }
