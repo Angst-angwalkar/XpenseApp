@@ -1,0 +1,4 @@
+# Project exclude paths
+/ExpenseService/target/
+/XpenseReports/target/
+/XpenseUser/target/
