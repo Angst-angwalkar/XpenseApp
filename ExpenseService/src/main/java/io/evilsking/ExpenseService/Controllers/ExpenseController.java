@@ -3,6 +3,7 @@ package io.evilsking.ExpenseService.Controllers;
 
 import io.evilsking.ExpenseService.Models.ExpenseModel;
 import io.evilsking.ExpenseService.Services.ExpenseServices;
+import io.evilsking.ExpenseService.dto.ExpenseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,9 @@ public class ExpenseController {
     @Autowired
     private ExpenseServices expenseServices;
 
-    @GetMapping("/{userId}/all")
-    public ResponseEntity<List<Optional<ExpenseModel>>> getAllExpenses(@PathVariable Long userId){
-        return new ResponseEntity<List<Optional<ExpenseModel>>>(expenseServices.getAllUsersExpenses(userId), HttpStatus.OK);
+    @GetMapping("/{userId}/expense")
+    public ResponseEntity<List<ExpenseResponse>> getAllExpenses(@PathVariable Long userId){
+        return new ResponseEntity<List<ExpenseResponse>>(expenseServices.getAllUsersExpenses(userId), HttpStatus.OK);
     }
 
 
