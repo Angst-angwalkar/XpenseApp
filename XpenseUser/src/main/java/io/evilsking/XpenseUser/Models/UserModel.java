@@ -14,11 +14,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.GenerationType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -133,5 +135,29 @@ public class UserModel extends RepresentationModel<UserModel> {
 			inverseJoinColumns = {@JoinColumn(name = "ROLEMODEL_ID", referencedColumnName = "roleId")}
 	)
 	private List<RoleModel> roles = new ArrayList<>();
+
+	@Column(
+			name = "createdOn",
+			nullable = false
+	)
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	private Date createdOn;
+
+	@Column(
+			name = "updatedOn",
+			nullable = false
+	)
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	private Date updatedOn;
+
+	@Column(
+			name = "deletedOn",
+			nullable = false
+	)
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	private Date deletedOn;
+
+
+
 
 }
