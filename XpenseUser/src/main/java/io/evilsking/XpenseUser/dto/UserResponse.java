@@ -17,7 +17,7 @@ public class UserResponse extends RepresentationModel<UserResponse> {
     private String userName;
     private String firstName;
     private String middleName;
-    private boolean isActive;
+    private Boolean isActive;
     private String lastName;
     private String age;
     private String mobileNo;
