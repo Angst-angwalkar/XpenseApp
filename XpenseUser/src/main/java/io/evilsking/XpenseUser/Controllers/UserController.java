@@ -42,12 +42,8 @@ public class UserController {
 	
 	@RequestMapping(method=RequestMethod.GET, path="/{userId}")
 	public ResponseEntity<UserResponse> getUserDetails(@PathVariable Long userId){
-
 		UserResponse userResponse = userService.getUserById(userId);
-		
 		return ResponseEntity.ok(userResponse);
-		
-//		return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
 	}
 	
 	
@@ -73,7 +69,4 @@ public class UserController {
 		boolean del = userService.deleteUser(userId);
 		return new ResponseEntity<>(del, HttpStatus.OK);
 	}
-	
-	
-
 }
