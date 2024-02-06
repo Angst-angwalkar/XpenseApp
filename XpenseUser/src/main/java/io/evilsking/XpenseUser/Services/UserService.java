@@ -100,7 +100,7 @@ public class UserService {
 
 		if (userModel != null){
 			responseMessage = String.format(messages.getMessage("user.create.message", null, locale),
-					userModel.toString());
+					userModel.getUserName());
 		}
 		return responseMessage;
 
@@ -122,7 +122,23 @@ public class UserService {
 
 			Arrays.stream(expenseResponses).collect(Collectors.toList());
 
-			userModel.add(linkTo(methodOn(UserController.class)
+			UserResponse userResponse =  UserResponse.builder()
+					.userName(userModel.getUserName())
+					.firstName(userModel.getFirstName())
+					.lastName(userModel.getLastName())
+					.email(userModel.getEmail())
+					.mobileNo(userModel.getMobileNo())
+					.age(userModel.getAge())
+					.isActive(userModel.getIsActive())
+					.address1(userModel.getAddress1())
+					.address2(userModel.getAddress2())
+					.responseList(Arrays.stream(expenseResponses)
+							.collect(Collectors.toList()))
+					.build();
+
+
+
+			userResponse.add(linkTo(methodOn(UserController.class)
 							.getUserDetails(userModel.getUserId()))
 							.withSelfRel(),
 					linkTo(methodOn(UserController.class)
@@ -135,14 +151,7 @@ public class UserService {
 							.deleteUser(userModel.getUserId()))
 							.withRel("deleteUser"));
 
-
-			return UserResponse.builder()
-					.userName(userModel.getUserName())
-					.firstName(userModel.getFirstName())
-					.lastName(userModel.getLastName())
-					.responseList(Arrays.stream(expenseResponses).collect(Collectors.toList()))
-					.build();
-
+			return userResponse;
 //			return userModel.get();
 		}
 	}

@@ -93,7 +93,7 @@ public class UserModel extends RepresentationModel<UserModel> {
 			name = "isActive",
 			columnDefinition = "boolean default false"
 	)
-	private boolean isActive;
+	private Boolean isActive;
 
 	@Column(
 			name = "email", nullable = false, length = 25

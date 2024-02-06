@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
@@ -12,18 +13,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserResponse {
-    private Long userId;
-    String userName;
-    String firstName;
-    String middleName;
-    boolean isActive;
-    String lastName;
-    String age;
-    String mobileNo;
-    String email;
-    String address1;
-    String address2;
-    List<ExpenseResponse> responseList;
+public class UserResponse extends RepresentationModel<UserResponse> {
+    private String userName;
+    private String firstName;
+    private String middleName;
+    private boolean isActive;
+    private String lastName;
+    private String age;
+    private String mobileNo;
+    private String email;
+    private String address1;
+    private String address2;
+    private List<ExpenseResponse> responseList;
 
 }
