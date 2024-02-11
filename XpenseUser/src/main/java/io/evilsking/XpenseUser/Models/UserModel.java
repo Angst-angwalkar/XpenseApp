@@ -9,6 +9,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.evilsking.XpenseUser.dto.ExpenseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -140,22 +141,20 @@ public class UserModel extends RepresentationModel<UserModel> {
 			name = "createdOn",
 			nullable = false
 	)
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date createdOn;
 
 	@Column(
-			name = "updatedOn",
-			nullable = false
+			name = "updatedOn"
 	)
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date updatedOn;
 
 	@Column(
-			name = "deletedOn",
-			nullable = false
+			name = "deactivatedOn"
 	)
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
-	private Date deletedOn;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+	private Date deactivatedOn;
 
 
 

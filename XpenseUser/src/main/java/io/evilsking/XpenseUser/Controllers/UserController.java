@@ -20,7 +20,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import io.evilsking.XpenseUser.Models.UserModel;
 import io.evilsking.XpenseUser.Services.UserService;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @RestController
 @RequestMapping(value="/user")
@@ -30,8 +29,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private WebClient webClient;
 	
 	
 	@RequestMapping(method=RequestMethod.GET, path="/all")
