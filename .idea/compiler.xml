@@ -8,11 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="XpenseReceipts" />
+        <module name="XpenseCategory" />
+        <module name="XpenseUser" />
+        <module name="XpenseDiscoveryServer" />
         <module name="ExpenseService" />
         <module name="XpenseNotification" />
         <module name="XpenseReports" />
-        <module name="XpenseCategory" />
-        <module name="XpenseUser" />
       </profile>
     </annotationProcessing>
   </component>
@@ -20,6 +21,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ExpenseService" options="-parameters" />
       <module name="XpenseCategory" options="-parameters" />
+      <module name="XpenseDiscoveryServer" options="-parameters" />
       <module name="XpenseNotification" options="-parameters" />
       <module name="XpenseReceipts" options="-parameters" />
       <module name="XpenseReports" options="-parameters" />

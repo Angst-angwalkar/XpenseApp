@@ -1,9 +1,8 @@
 package io.evilsking.XpenseUser.Services;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import io.evilsking.XpenseUser.Controllers.UserController;
@@ -35,7 +34,7 @@ public class UserService {
 	private UserRepository userRepository;
 
 	@Autowired
-	WebClient webClient;
+	private WebClient.Builder loadBalancedWebClientBuilder;
 
 	@Autowired
 	MessageSource messages;
@@ -94,6 +93,12 @@ public class UserService {
 			throw new UserValidationException(mobileValidation);
 		}
 
+		Date in = new Date();
+		LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
+		Date out = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+
+		userModel.setCreatedOn(out);
+
 		userRepository.save(userModel);
 
 		String responseMessage = null;
@@ -113,8 +118,8 @@ public class UserService {
 		}
 		else {
 
-			ExpenseResponse[] expenseResponses = webClient.get().uri(
-					"http://localhost:8089/user/{userId}/expense", userId)
+			ExpenseResponse[] expenseResponses = loadBalancedWebClientBuilder.build().get().uri(
+					"http://expense-service/user/{userId}/expense", userId)
 					.retrieve()
 					.bodyToMono(ExpenseResponse[].class)
 					.block();
