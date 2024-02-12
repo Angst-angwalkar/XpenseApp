@@ -129,13 +129,13 @@ public class UserModel extends RepresentationModel<UserModel> {
 	private String password;
 
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(
-			name = "user_roles",
-			joinColumns = {@JoinColumn(name = "USERMODEL_ID", referencedColumnName = "userId")},
-			inverseJoinColumns = {@JoinColumn(name = "ROLEMODEL_ID", referencedColumnName = "roleId")}
-	)
-	private List<RoleModel> roles = new ArrayList<>();
+//	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JoinTable(
+//			name = "user_roles",
+//			joinColumns = {@JoinColumn(name = "USERMODEL_ID", referencedColumnName = "userId")},
+//			inverseJoinColumns = {@JoinColumn(name = "ROLEMODEL_ID", referencedColumnName = "roleId")}
+//	)
+//	private List<RoleModel> roles = new ArrayList<>();
 
 	@Column(
 			name = "createdOn",
