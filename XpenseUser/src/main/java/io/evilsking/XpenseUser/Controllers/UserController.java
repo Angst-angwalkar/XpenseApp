@@ -22,7 +22,7 @@ import io.evilsking.XpenseUser.Models.UserModel;
 import io.evilsking.XpenseUser.Services.UserService;
 
 @RestController
-@RequestMapping(value="/user")
+@RequestMapping(value="/api/user")
 public class UserController {
 	
 

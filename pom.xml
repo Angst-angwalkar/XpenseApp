@@ -22,6 +22,7 @@
 		<module>XpenseReceipts</module>
 		<module>ExpenseService</module>
         <module>XpenseDiscoveryServer</module>
+        <module>XpenseApiGateway</module>
         <!--		<module>XpenseConfigServer</module>-->
 	</modules>
     <properties>
@@ -29,10 +30,10 @@
 		<spring-cloud.version>2021.0.2</spring-cloud.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-web</artifactId>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
