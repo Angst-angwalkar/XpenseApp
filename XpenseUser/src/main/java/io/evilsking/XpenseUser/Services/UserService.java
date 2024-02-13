@@ -9,6 +9,8 @@ import io.evilsking.XpenseUser.Controllers.UserController;
 import io.evilsking.XpenseUser.Exceptions.UserExceptions.UserAlreadyExistsException;
 import io.evilsking.XpenseUser.Exceptions.UserExceptions.UserNotFoundException;
 import io.evilsking.XpenseUser.Exceptions.UserExceptions.UserValidationException;
+import io.evilsking.XpenseUser.Models.UserProfileModel;
+import io.evilsking.XpenseUser.Repositories.UserProfileRepository;
 import io.evilsking.XpenseUser.Repositories.UserRepository;
 import io.evilsking.XpenseUser.Validators.UserValidators;
 import io.evilsking.XpenseUser.dto.ExpenseResponse;
@@ -16,9 +18,9 @@ import io.evilsking.XpenseUser.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Component;
 
 import io.evilsking.XpenseUser.Models.UserModel;
+import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -32,6 +34,9 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private UserProfileRepository userProfileRepository;
 
 	@Autowired
 	private WebClient.Builder loadBalancedWebClientBuilder;
@@ -99,7 +104,21 @@ public class UserService {
 
 		userModel.setCreatedOn(out);
 
+
+		UserProfileModel userProfileModel = new UserProfileModel();
+
+		userProfileModel.setMonthlyCap(0L);
+		userProfileModel.setOccupation("");
+		userProfileModel.setMonthlyIncome(0L);
+		userProfileModel.setOccupationCategory("");
+		userProfileModel.setUserModel(userModel);
+		userProfileModel.setSourceOfIncome("");
+
+
+		userProfileRepository.save(userProfileModel);
+		userModel.setUserProfileModel(userProfileModel);
 		userRepository.save(userModel);
+
 
 		String responseMessage = null;
 
@@ -113,6 +132,7 @@ public class UserService {
 
 	public UserResponse getUserById(Long userId) {
 		UserModel userModel = userRepository.findByUserId(userId);
+		Optional<UserProfileModel> userProfileModel = userProfileRepository.findByProfileId(userModel.getUserProfileModel().getProfileId());
 		if (userModel == null){
 			throw new UserNotFoundException("User with id " + userId + " not found!");
 		}
@@ -126,6 +146,8 @@ public class UserService {
 
 
 			Arrays.stream(expenseResponses).collect(Collectors.toList());
+
+
 
 			UserResponse userResponse =  UserResponse.builder()
 					.userName(userModel.getUserName())
@@ -155,6 +177,12 @@ public class UserService {
 					linkTo(methodOn(UserController.class)
 							.deleteUser(userModel.getUserId()))
 							.withRel("deleteUser"));
+
+			if (!userProfileModel.isEmpty()){
+				userResponse.setOccupation(userProfileModel.get().getOccupation());
+				userResponse.setMonthlyIncome(userProfileModel.get().getMonthlyIncome());
+				userResponse.setMonthlyCap(userProfileModel.get().getMonthlyCap());
+			}
 
 			return userResponse;
 //			return userModel.get();
@@ -208,4 +236,24 @@ public class UserService {
         return userRepository.findAll();
 	}
 
+	public Optional<UserProfileModel> getUserProfile(Long profileId) {
+		Optional<UserProfileModel> userProfileModel = userProfileRepository.findByProfileId(profileId);
+		if (userProfileModel.isEmpty()){
+			throw new UserNotFoundException("User with profile id " + profileId + " not found!");
+		}
+		return userProfileRepository.findByProfileId(profileId);
+	}
+
+	public UserProfileModel updateUserProfile(UserProfileModel userProfileModel, Long profileId) {
+
+		Optional<UserProfileModel> userProfileModel1 = userProfileRepository.findByProfileId(profileId);
+		if (userProfileModel1.isEmpty()) {
+			throw new UserNotFoundException("Could not find user to update user details!");
+		}
+		else {
+			userProfileModel.setProfileId(profileId);
+			userProfileRepository.save(userProfileModel);
+			return userProfileModel;
+		}
+	}
 }

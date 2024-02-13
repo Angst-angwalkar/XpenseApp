@@ -1,15 +1,8 @@
 package io.evilsking.XpenseUser.Models;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.evilsking.XpenseUser.dto.ExpenseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,14 +11,9 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.RepresentationModel;
 
-import javax.persistence.GenerationType;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 
 
 @Getter
@@ -129,13 +117,12 @@ public class UserModel extends RepresentationModel<UserModel> {
 	private String password;
 
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(
-			name = "user_roles",
-			joinColumns = {@JoinColumn(name = "USERMODEL_ID", referencedColumnName = "userId")},
-			inverseJoinColumns = {@JoinColumn(name = "ROLEMODEL_ID", referencedColumnName = "roleId")}
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(
+			name = "profileId"
 	)
-	private List<RoleModel> roles = new ArrayList<>();
+	@JsonIgnore
+	private UserProfileModel userProfileModel;
 
 	@Column(
 			name = "createdOn",
