@@ -131,15 +131,16 @@ public class UserService {
 	}
 
 	public UserResponse getUserById(Long userId) {
-		UserModel userModel = userRepository.findByUserId(userId);
-		Optional<UserProfileModel> userProfileModel = userProfileRepository.findByProfileId(userModel.getUserProfileModel().getProfileId());
-		if (userModel == null){
+		Optional<UserModel> userModel = userRepository.findByUserId(userId);
+		if (userModel.isEmpty()){
 			throw new UserNotFoundException("User with id " + userId + " not found!");
 		}
-		else {
 
+
+		else {
+			Optional<UserProfileModel> userProfileModel = userProfileRepository.findByProfileId(userModel.get().getUserProfileModel().getProfileId());
 			ExpenseResponse[] expenseResponses = loadBalancedWebClientBuilder.build().get().uri(
-					"http://expense-service/user/{userId}/expense", userId)
+					"http://expense-service/api/expense/{userId}/details", userId)
 					.retrieve()
 					.bodyToMono(ExpenseResponse[].class)
 					.block();
@@ -150,15 +151,15 @@ public class UserService {
 
 
 			UserResponse userResponse =  UserResponse.builder()
-					.userName(userModel.getUserName())
-					.firstName(userModel.getFirstName())
-					.lastName(userModel.getLastName())
-					.email(userModel.getEmail())
-					.mobileNo(userModel.getMobileNo())
-					.age(userModel.getAge())
-					.isActive(userModel.getIsActive())
-					.address1(userModel.getAddress1())
-					.address2(userModel.getAddress2())
+					.userName(userModel.get().getUserName())
+					.firstName(userModel.get().getFirstName())
+					.lastName(userModel.get().getLastName())
+					.email(userModel.get().getEmail())
+					.mobileNo(userModel.get().getMobileNo())
+					.age(userModel.get().getAge())
+					.isActive(userModel.get().getIsActive())
+					.address1(userModel.get().getAddress1())
+					.address2(userModel.get().getAddress2())
 					.responseList(Arrays.stream(expenseResponses)
 							.collect(Collectors.toList()))
 					.build();
@@ -166,16 +167,16 @@ public class UserService {
 
 
 			userResponse.add(linkTo(methodOn(UserController.class)
-							.getUserDetails(userModel.getUserId()))
+							.getUserDetails(userModel.get().getUserId()))
 							.withSelfRel(),
 					linkTo(methodOn(UserController.class)
-							.createUser(userModel, null))
+							.createUser(userModel.get(), null))
 							.withRel("createUser"),
 					linkTo(methodOn(UserController.class)
-							.updateUser(userModel, userModel.getUserId()))
+							.updateUser(userModel.get(), userModel.get().getUserId()))
 							.withRel("updateUser"),
 					linkTo(methodOn(UserController.class)
-							.deleteUser(userModel.getUserId()))
+							.deleteUser(userModel.get().getUserId()))
 							.withRel("deleteUser"));
 
 			if (!userProfileModel.isEmpty()){

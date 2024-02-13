@@ -18,6 +18,6 @@ public interface UserRepository extends JpaRepository <UserModel, Long> {
 	
 	UserModel getUserByAadharNo(String aadharNo);
 
-	UserModel findByUserId(Long userId);
+	Optional<UserModel> findByUserId(Long userId);
 	
 }

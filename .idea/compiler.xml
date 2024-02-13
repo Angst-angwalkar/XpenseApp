@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="XpenseReceipts" />
+        <module name="XpenseApiGateway" />
         <module name="XpenseCategory" />
         <module name="XpenseUser" />
         <module name="XpenseDiscoveryServer" />
@@ -20,6 +21,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ExpenseService" options="-parameters" />
+      <module name="XpenseApiGateway" options="-parameters" />
       <module name="XpenseCategory" options="-parameters" />
       <module name="XpenseDiscoveryServer" options="-parameters" />
       <module name="XpenseNotification" options="-parameters" />

@@ -17,13 +17,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/expense")
 public class ExpenseController {
 
     @Autowired
     private ExpenseServices expenseServices;
 
-    @GetMapping("/{userId}/expense")
+    @GetMapping("/{userId}/details")
     public ResponseEntity<List<ExpenseResponse>> getAllExpenses(@PathVariable Long userId){
         return new ResponseEntity<>(expenseServices.getAllUsersExpenses(userId), HttpStatus.OK);
     }
