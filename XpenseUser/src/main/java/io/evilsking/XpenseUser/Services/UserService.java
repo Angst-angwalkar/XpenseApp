@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 
 import io.evilsking.XpenseUser.Models.UserModel;
+import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -113,8 +114,10 @@ public class UserService {
 		userProfileModel.setUserModel(userModel);
 		userProfileModel.setSourceOfIncome("");
 
-		userRepository.save(userModel);
+
 		userProfileRepository.save(userProfileModel);
+		userModel.setUserProfileModel(userProfileModel);
+		userRepository.save(userModel);
 
 
 		String responseMessage = null;
@@ -129,6 +132,7 @@ public class UserService {
 
 	public UserResponse getUserById(Long userId) {
 		UserModel userModel = userRepository.findByUserId(userId);
+		Optional<UserProfileModel> userProfileModel = userProfileRepository.findByProfileId(userModel.getUserProfileModel().getProfileId());
 		if (userModel == null){
 			throw new UserNotFoundException("User with id " + userId + " not found!");
 		}
@@ -142,6 +146,8 @@ public class UserService {
 
 
 			Arrays.stream(expenseResponses).collect(Collectors.toList());
+
+
 
 			UserResponse userResponse =  UserResponse.builder()
 					.userName(userModel.getUserName())
@@ -171,6 +177,12 @@ public class UserService {
 					linkTo(methodOn(UserController.class)
 							.deleteUser(userModel.getUserId()))
 							.withRel("deleteUser"));
+
+			if (!userProfileModel.isEmpty()){
+				userResponse.setOccupation(userProfileModel.get().getOccupation());
+				userResponse.setMonthlyIncome(userProfileModel.get().getMonthlyIncome());
+				userResponse.setMonthlyCap(userProfileModel.get().getMonthlyCap());
+			}
 
 			return userResponse;
 //			return userModel.get();
