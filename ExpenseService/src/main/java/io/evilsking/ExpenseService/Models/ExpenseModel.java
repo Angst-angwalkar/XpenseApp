@@ -23,16 +23,19 @@ public class ExpenseModel{
     private String category;
     private Long amount;
     private Long priority;
-    private Boolean isActiveUser;
     private Long monthlyLimit;
+    private Boolean isActive;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private Date createdOn;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+    private Date expenseDate;
+
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private Date updatedOn;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private Date deletedOn;
 
 

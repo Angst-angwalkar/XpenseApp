@@ -9,6 +9,7 @@ import io.evilsking.XpenseUser.Controllers.UserController;
 import io.evilsking.XpenseUser.Exceptions.UserExceptions.UserAlreadyExistsException;
 import io.evilsking.XpenseUser.Exceptions.UserExceptions.UserNotFoundException;
 import io.evilsking.XpenseUser.Exceptions.UserExceptions.UserValidationException;
+import io.evilsking.XpenseUser.Helpers.Helpers;
 import io.evilsking.XpenseUser.Models.UserProfileModel;
 import io.evilsking.XpenseUser.Repositories.UserProfileRepository;
 import io.evilsking.XpenseUser.Repositories.UserRepository;
@@ -46,6 +47,9 @@ public class UserService {
 
 	public String saveUser(UserModel userModel, Locale locale) {
 		UserModel userModel1;
+
+		Helpers helpers = new Helpers();
+
 		userModel1 = userRepository.getUserByUserName(userModel.getUserName());
 		if (userModel1 != null){
 			throw new UserAlreadyExistsException("User with username " + userModel.getUserName() + " already exists. Please choose a different username.");
@@ -98,12 +102,7 @@ public class UserService {
 			throw new UserValidationException(mobileValidation);
 		}
 
-		Date in = new Date();
-		LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
-		Date out = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
-
-		userModel.setCreatedOn(out);
-
+		userModel.setCreatedOn(helpers.getCurrentDate());
 
 		UserProfileModel userProfileModel = new UserProfileModel();
 
@@ -196,14 +195,26 @@ public class UserService {
 			throw new UserNotFoundException("Could not find user to update user details!");
 		}
 		else {
+			Helpers helpers = new Helpers();
 			userModel.setUserId(userId);
+			userModel.setUpdatedOn(helpers.getCurrentDate());
 			userRepository.save(userModel);
 			return userModel;
 		}
 	}
 
 	public boolean deleteUser(Long userId) {
-		userRepository.deleteById(userId);
+//		userRepository.deleteById(userId);
+		Optional<UserModel> userModel = userRepository.findByUserId(userId);
+
+		if (userModel.isEmpty()){
+			throw new UserNotFoundException("The user you're trying to delete is not found!");
+		}
+		else{
+			Helpers helpers = new Helpers();
+			userModel.get().setDeactivatedOn(helpers.getCurrentDate());
+			userModel.get().setIsActive(false);
+		}
 		return true;
 	}
 

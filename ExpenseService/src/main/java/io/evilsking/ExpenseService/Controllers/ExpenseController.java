@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +23,24 @@ public class ExpenseController {
     @GetMapping("/{userId}/details")
     public ResponseEntity<List<ExpenseResponse>> getAllExpenses(@PathVariable Long userId){
         return new ResponseEntity<>(expenseServices.getAllUsersExpenses(userId), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/{userId}/new/expense")
+    public ResponseEntity<String> addNewExpense(@RequestBody ExpenseModel expenseModel){
+        return new ResponseEntity<>(expenseServices.addNewUserExpense(expenseModel), HttpStatus.OK);
+    }
+
+
+    @PutMapping("/{userId}/update/expense/{expenseId}")
+    public ResponseEntity<ExpenseModel> updateExpense(@RequestBody ExpenseModel expenseModel, @PathVariable Long expenseId){
+        return new ResponseEntity<>(expenseServices.updateExpense(expenseModel, expenseId), HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{userId}/delete/expense/{expenseId}")
+    public ResponseEntity<String> updateExpense(@PathVariable Long expenseId){
+        return new ResponseEntity<>(expenseServices.deleteExpense(expenseId), HttpStatus.OK);
     }
 
 
