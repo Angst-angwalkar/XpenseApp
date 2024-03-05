@@ -77,7 +77,7 @@ public class ExpenseServices {
             throw new ExpenseNotFoundException("The expense you're trying to update is probably deleted / archived and hence cannot be updated");
         }
         else {
-            expenseModel.setUserId(expenseId);
+            expenseModel.setExpenseId(expenseId);
             expenseModel.setUpdatedOn(helper.getCurrentDate());
             expenseRepository.save(expenseModel);
             return expenseModel;
