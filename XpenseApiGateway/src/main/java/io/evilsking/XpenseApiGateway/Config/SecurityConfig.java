@@ -1,4 +1,4 @@
-package Config;
+package io.evilsking.XpenseApiGateway.Config;
 
 
 import org.springframework.context.annotation.Bean;
