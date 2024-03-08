@@ -20,6 +20,7 @@ public class ExpenseModel{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long expenseId;
     private Long userId;
+    private String userName;
     private String category;
     private Long amount;
     private Long priority;
