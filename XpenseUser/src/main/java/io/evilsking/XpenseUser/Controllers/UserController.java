@@ -37,7 +37,7 @@ public class UserController {
 	}
 	
 	
-	@RequestMapping(method=RequestMethod.GET, path="/{userId}")
+	@RequestMapping(method=RequestMethod.GET, path="/get/{userId}")
 	public ResponseEntity<UserResponse> getUserDetails(@PathVariable Long userId){
 		UserResponse userResponse = userService.getUserById(userId);
 		return ResponseEntity.ok(userResponse);
