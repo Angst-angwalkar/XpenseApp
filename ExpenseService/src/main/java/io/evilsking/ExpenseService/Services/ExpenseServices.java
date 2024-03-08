@@ -7,8 +7,10 @@ import io.evilsking.ExpenseService.Models.ExpenseModel;
 import io.evilsking.ExpenseService.Repositories.ExpenseRepository;
 import io.evilsking.ExpenseService.Validators.ExpenseValidator;
 import io.evilsking.ExpenseService.dto.ExpenseResponse;
+import io.evilsking.ExpenseService.dto.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +23,9 @@ public class ExpenseServices {
 
     @Autowired
     private ExpenseRepository expenseRepository;
+
+    @Autowired
+    private WebClient.Builder loadBalancedWebClientBuilder;
 
     public List<ExpenseResponse> getAllUsersExpenses(Long userId){
         return expenseRepository.findByUserId(userId).stream()
@@ -38,10 +43,14 @@ public class ExpenseServices {
     public String addNewUserExpense(ExpenseModel expenseModel) {
 
         ExpenseValidator validator = new ExpenseValidator();
+        Helpers helpers = new Helpers();
 
 
-        if (!validator.validateUser(expenseModel)){
-            return "User not validated, please try again or contact the admin.";
+        UserResponse userResponse = fetchUserDetails(expenseModel.getUserId());
+
+        if (!userResponse.getUserName().equals(expenseModel.getUserName()))
+        {
+            throw new UserNotFoundException("The user with user id: " + expenseModel.getUserId() + " is not valid!");
         }
 
         if (!validator.validateCategory(expenseModel)){
@@ -56,6 +65,8 @@ public class ExpenseServices {
             return "Please specify the date of the expense!";
         }
 
+        expenseModel.setCreatedOn(helpers.getCurrentDate());
+
         expenseRepository.save(expenseModel);
 
         return "Expense saved successfully!";
@@ -67,9 +78,13 @@ public class ExpenseServices {
         ExpenseValidator validator = new ExpenseValidator();
         Helpers helper = new Helpers();
 
-        if (!validator.validateUser(expenseModel)){
-            throw new UserNotFoundException("The owner of this expense is not found! Please contact the administrator.");
+        UserResponse userResponse = fetchUserDetails(expenseModel.getUserId());
+
+        if (userResponse.getUserName().equals(expenseModel.getUserName()))
+        {
+            throw new UserNotFoundException("User with user id: " + expenseModel.getUserId() + " not valid!");
         }
+
 
         Optional<ExpenseModel> expenseModel1 = expenseRepository.findByExpenseId(expenseId);
 
@@ -92,12 +107,17 @@ public class ExpenseServices {
         Helpers helper = new Helpers();
         Optional<ExpenseModel> expenseModel = expenseRepository.findByExpenseId(expenseId);
 
-        if (!validator.validateUser(expenseModel.get())){
-            throw new UserNotFoundException("The owner of this expense is not found! Please contact the administrator.");
+        if (expenseModel.isEmpty())
+        {
+            throw new ExpenseNotFoundException("The expense you're trying to delete is not available!");
         }
 
-        if (expenseModel.isEmpty()){
-            throw new ExpenseNotFoundException("The expense you're trying to delete is not available at this moment. Please try again later!");
+        UserResponse userResponse = fetchUserDetails(expenseModel.get().getUserId());
+
+
+        if (userResponse.getUserName().equals(expenseModel.get().getUserName()))
+        {
+            throw new UserNotFoundException("User with user id: " + expenseModel.get().getUserId() + " not valid!");
         }
 
         expenseModel.get().setDeletedOn(helper.getCurrentDate());
@@ -107,4 +127,17 @@ public class ExpenseServices {
         return "Expense deleted successfully";
 
     }
+
+
+    public UserResponse fetchUserDetails(Long userId){
+        UserResponse userResponses = loadBalancedWebClientBuilder.build().get().uri(
+                        "http://user-service/api/user/get/{userId}", userId)
+                .retrieve()
+                .bodyToMono(UserResponse.class)
+                .block();
+
+        return userResponses;
+    }
+
+
 }
