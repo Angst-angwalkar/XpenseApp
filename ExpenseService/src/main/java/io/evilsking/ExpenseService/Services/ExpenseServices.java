@@ -7,14 +7,13 @@ import io.evilsking.ExpenseService.Models.ExpenseModel;
 import io.evilsking.ExpenseService.Repositories.ExpenseRepository;
 import io.evilsking.ExpenseService.Validators.ExpenseValidator;
 import io.evilsking.ExpenseService.dto.ExpenseResponse;
+import io.evilsking.ExpenseService.dto.MonthlyExpenseResponse;
 import io.evilsking.ExpenseService.dto.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -140,4 +139,39 @@ public class ExpenseServices {
     }
 
 
+    public MonthlyExpenseResponse getMonthlyExpense(Long userId, Date currentDate) {
+        MonthlyExpenseResponse monthlyExpenseResponse = new MonthlyExpenseResponse();
+        List<ExpenseModel> allExpenses = expenseRepository.findByUserId(userId);
+        List<String> categoryList = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentDate);
+        cal.set(Calendar.DATE, 1);
+        Date startDate = cal.getTime();
+        cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
+        Date endDate = cal.getTime();
+        monthlyExpenseResponse.setStartDate(startDate);
+        monthlyExpenseResponse.setEndDate(endDate);
+        monthlyExpenseResponse.setUserId(userId);
+
+        allExpenses = allExpenses.stream()
+                .filter(
+                        expense -> expense.getExpenseDate().after(startDate) && expense.getExpenseDate().before(endDate)
+                ).collect(Collectors.toList());
+        if (!allExpenses.isEmpty()){
+            monthlyExpenseResponse.setTotalAmount(allExpenses.stream()
+                    .map(expense -> expense.getAmount())
+                    .reduce(0L, Long::sum));
+            categoryList = allExpenses.stream()
+                    .map(expense -> expense.getCategory()).collect(Collectors.toList());
+
+        }
+        else{
+            monthlyExpenseResponse.setTotalAmount(0L);
+
+        }
+
+        monthlyExpenseResponse.setCategoryList(categoryList);
+
+        return monthlyExpenseResponse;
+    }
 }
