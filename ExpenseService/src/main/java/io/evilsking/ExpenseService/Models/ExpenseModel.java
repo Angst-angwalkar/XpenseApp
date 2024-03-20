@@ -19,7 +19,13 @@ public class ExpenseModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long expenseId;
-    private Long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private UserModel user;
+
+//    private Long userId;
+
     private String userName;
     private String category;
     private Long amount;
@@ -38,7 +44,5 @@ public class ExpenseModel{
 
     @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private Date deletedOn;
-
-
 
 }
