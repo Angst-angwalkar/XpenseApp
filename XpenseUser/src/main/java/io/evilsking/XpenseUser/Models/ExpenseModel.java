@@ -1,4 +1,4 @@
-package io.evilsking.ExpenseService.Models;
+package io.evilsking.XpenseUser.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExpenseModel{
+public class ExpenseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long expenseId;
@@ -23,8 +23,6 @@ public class ExpenseModel{
     @ManyToOne
     @JoinColumn(name = "userId")
     private UserModel user;
-
-//    private Long userId;
 
     private String userName;
     private String category;

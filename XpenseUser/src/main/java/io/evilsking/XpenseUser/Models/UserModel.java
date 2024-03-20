@@ -143,6 +143,10 @@ public class UserModel extends RepresentationModel<UserModel> {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date deactivatedOn;
 
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<ExpenseModel> expenseModelList;
+
 
 
 

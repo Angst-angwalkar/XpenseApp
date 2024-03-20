@@ -29,8 +29,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	
-	
+
 	@RequestMapping(method=RequestMethod.GET, path="/all")
 	public ResponseEntity<List<UserModel>> getAllUsers(){
 		return new ResponseEntity<List<UserModel>>(userService.getAllUsers(), HttpStatus.OK);
