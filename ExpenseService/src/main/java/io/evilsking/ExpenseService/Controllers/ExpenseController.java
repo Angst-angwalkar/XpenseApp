@@ -1,12 +1,14 @@
 package io.evilsking.ExpenseService.Controllers;
 
 
+import io.evilsking.ExpenseService.AdvancedExpenseSearch.ExpenseSearchDto;
 import io.evilsking.ExpenseService.Models.ExpenseModel;
 import io.evilsking.ExpenseService.Services.ExpenseServices;
 import io.evilsking.ExpenseService.dto.ExpenseResponse;
 import io.evilsking.ExpenseService.dto.MonthlyExpenseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +44,7 @@ public class ExpenseController {
 
 
     @DeleteMapping("/{userId}/delete/expense/{expenseId}")
-    public ResponseEntity<String> updateExpense(@PathVariable Long expenseId){
+    public ResponseEntity<String> deleteExpense(@PathVariable Long expenseId){
         return new ResponseEntity<>(expenseServices.deleteExpense(expenseId), HttpStatus.OK);
     }
 
@@ -51,6 +53,16 @@ public class ExpenseController {
     @GetMapping("/{userId}/get-expense/monthly/{currentDate}")
     public ResponseEntity<MonthlyExpenseResponse> getMonthlyExpense(@PathVariable Long userId, @PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") Date currentDate){
         return new ResponseEntity<MonthlyExpenseResponse>(expenseServices.getMonthlyExpense(userId, currentDate), HttpStatus.OK);
+    }
+
+    @PostMapping("{userId}/get-expense/search")
+    public ResponseEntity<Page<ExpenseModel>> getFilteredExpenses(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int pageNum,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestBody ExpenseSearchDto expenseSearchDto
+            ){
+        return new ResponseEntity<Page<ExpenseModel>>(expenseServices.getFilteredExpenses(userId, expenseSearchDto, pageNum, pageSize), HttpStatus.OK);
     }
 
 }

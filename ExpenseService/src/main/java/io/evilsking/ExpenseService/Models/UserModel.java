@@ -1,12 +1,15 @@
 package io.evilsking.ExpenseService.Models;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.util.List;
 
 
 @Getter
@@ -81,6 +84,10 @@ public class UserModel extends RepresentationModel<UserModel> {
     )
     private String address2;
 
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<ExpenseModel> expenseModelList;
 
 
 
