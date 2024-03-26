@@ -36,16 +36,16 @@ public class ResilienceConfig {
     }
 
 
-    @Bean
-    public RateLimiterRegistry rateLimiterRegistry(){
-        return RateLimiterRegistry.ofDefaults();
-    }
-
-    @Bean
-    public RateLimiter rateLimiter(RateLimiterRegistry rateLimiterRegistry){
-        return rateLimiterRegistry.rateLimiter("gateway-limiter", RateLimiterConfig.custom().
-                limitForPeriod(10)
-                .limitRefreshPeriod(Duration.ofSeconds(1))
-                .build());
-    }
+//    @Bean
+//    public RateLimiterRegistry rateLimiterRegistry(){
+//        return RateLimiterRegistry.ofDefaults();
+//    }
+//
+//    @Bean
+//    public RateLimiter rateLimiter(RateLimiterRegistry rateLimiterRegistry){
+//        return rateLimiterRegistry.rateLimiter("gateway-limiter", RateLimiterConfig.custom().
+//                limitForPeriod(10)
+//                .limitRefreshPeriod(Duration.ofSeconds(1))
+//                .build());
+//    }
 }

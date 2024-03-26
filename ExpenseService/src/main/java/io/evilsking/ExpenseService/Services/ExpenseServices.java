@@ -7,7 +7,9 @@ import io.evilsking.ExpenseService.Exceptions.ExpenseNotFoundException;
 import io.evilsking.ExpenseService.Exceptions.UserNotFoundException;
 import io.evilsking.ExpenseService.Helpers.Helpers;
 import io.evilsking.ExpenseService.Models.ExpenseModel;
+import io.evilsking.ExpenseService.Models.UserModel;
 import io.evilsking.ExpenseService.Repositories.ExpenseRepository;
+import io.evilsking.ExpenseService.Repositories.UserRepository;
 import io.evilsking.ExpenseService.Validators.ExpenseValidator;
 import io.evilsking.ExpenseService.dto.ExpenseResponse;
 import io.evilsking.ExpenseService.dto.MonthlyExpenseResponse;
@@ -32,6 +34,9 @@ public class ExpenseServices {
     private ExpenseRepository expenseRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private WebClient.Builder loadBalancedWebClientBuilder;
 
     public List<ExpenseResponse> getAllUsersExpenses(Long userId) {
@@ -52,6 +57,11 @@ public class ExpenseServices {
         ExpenseValidator validator = new ExpenseValidator();
         Helpers helpers = new Helpers();
         UserResponse userResponse = fetchUserDetails(userId);
+        Optional<UserModel> userModel = userRepository.findByUserId(userId);
+
+        if (userModel.isEmpty()){
+            throw new UserNotFoundException("The user with user id: " + userId + " is not valid!");
+        }
 
         if (!userResponse.getUserName().equals(expenseModel.getUserName())) {
             throw new UserNotFoundException("The user with user id: " + userId + " is not valid!");
@@ -65,6 +75,7 @@ public class ExpenseServices {
             return "Please specify the date of the expense!";
         }
 
+        expenseModel.setUser(userModel.get());
         expenseModel.setCreatedOn(helpers.getCurrentDate());
         expenseRepository.save(expenseModel);
         return "Expense saved successfully!";
