@@ -84,9 +84,8 @@ public class UserModel extends RepresentationModel<UserModel> {
     )
     private String address2;
 
-
-    @OneToMany(mappedBy = "user")
     @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private List<ExpenseModel> expenseModelList;
 
 

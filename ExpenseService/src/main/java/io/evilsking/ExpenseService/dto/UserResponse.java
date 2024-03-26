@@ -24,5 +24,9 @@ public class UserResponse extends RepresentationModel<UserResponse> {
     private String email;
     private String address1;
     private String address2;
+    private Long monthlyCap;
+    private Long monthlyIncome;
+    private String occupation;
+    private List<ExpenseResponse> responseList;
 
 }
