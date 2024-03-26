@@ -32,8 +32,8 @@ public class ExpenseController {
 
 
     @PostMapping("/{userId}/new/expense")
-    public ResponseEntity<String> addNewExpense(@RequestBody ExpenseModel expenseModel){
-        return new ResponseEntity<>(expenseServices.addNewUserExpense(expenseModel), HttpStatus.OK);
+    public ResponseEntity<String> addNewExpense(@RequestBody ExpenseModel expenseModel, @PathVariable Long userId){
+        return new ResponseEntity<>(expenseServices.addNewUserExpense(expenseModel, userId), HttpStatus.OK);
     }
 
 

@@ -47,14 +47,14 @@ public class ExpenseServices {
                 ).collect(Collectors.toList());
     }
 
-    public String addNewUserExpense(ExpenseModel expenseModel) {
+    public String addNewUserExpense(ExpenseModel expenseModel, Long userId) {
 
         ExpenseValidator validator = new ExpenseValidator();
         Helpers helpers = new Helpers();
-        UserResponse userResponse = fetchUserDetails(expenseModel.getUser().getUserId());
+        UserResponse userResponse = fetchUserDetails(userId);
 
         if (!userResponse.getUserName().equals(expenseModel.getUserName())) {
-            throw new UserNotFoundException("The user with user id: " + expenseModel.getUser().getUserId() + " is not valid!");
+            throw new UserNotFoundException("The user with user id: " + userId + " is not valid!");
         }
 
         if (!validator.validateCategory(expenseModel)) {
