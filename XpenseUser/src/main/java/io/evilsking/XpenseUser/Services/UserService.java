@@ -145,10 +145,6 @@ public class UserService {
 					.block();
 
 
-			Arrays.stream(expenseResponses).collect(Collectors.toList());
-
-
-
 			UserResponse userResponse =  UserResponse.builder()
 					.userName(userModel.get().getUserName())
 					.firstName(userModel.get().getFirstName())
@@ -185,7 +181,6 @@ public class UserService {
 			}
 
 			return userResponse;
-//			return userModel.get();
 		}
 	}
 

@@ -29,4 +29,5 @@ public class UserResponse extends RepresentationModel<UserResponse> {
     private String occupation;
     private List<ExpenseResponse> responseList;
 
+
 }
